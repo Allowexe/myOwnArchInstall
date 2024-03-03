@@ -1,25 +1,23 @@
 #!/usr/bin/env bash
 
-echo "Please enter EFI paritition: (example /dev/sda1 or /dev/nvme0n1p1)"
+echo "Please enter EFI paritition: (/dev/xxx1"
 read EFI
 
-echo "Please enter SWAP paritition: (example /dev/sda2)"
+echo "Please enter SWAP paritition: (/dev/sda2)"
 read SWAP
 
-echo "Please enter Root(/) paritition: (example /dev/sda3)"
-read ROOT 
+echo "Please enter Root(/) paritition: (/dev/sda3)"
+read ROOT
 
-echo "Please enter your username"
-read USER 
+echo "username ?"
+read USER
 
-echo "Please enter your password"
-read PASSWORD 
+echo "password ?"
+read PASSWORD
 
-echo "Please choose Your Desktop Environment"
-echo "1. GNOME"
-echo "2. KDE"
-echo "3. XFCE"
-echo "4. NoDesktop"
+echo "KDE or Nothing ?"
+echo "1. KDE"
+echo "2. NoDesktop"
 read DESKTOP
 
 # make filesystems
@@ -41,52 +39,46 @@ echo "--------------------------------------"
 pacstrap /mnt base base-devel --noconfirm --needed
 
 # kernel
-pacstrap /mnt linux linux-firmware --noconfirm --needed
+pacstrap /mnt linux linux-firmware linux-headers --noconfirm --needed
 
 echo "--------------------------------------"
-echo "-- Setup Dependencies               --"
+echo "-- Setup Dependencies and Stuff     --"
 echo "--------------------------------------"
 
-pacstrap /mnt networkmanager network-manager-applet wireless_tools nano intel-ucode bluez bluez-utils blueman git --noconfirm --needed
+pacstrap /mnt networkmanager wireless_tools neovim intel-ucode bluez bluez-utils blueman git firefox kitty vlc --noconfirm --needed
 
 # fstab
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt >>/mnt/etc/fstab
 
 echo "--------------------------------------"
 echo "-- Bootloader Installation  --"
 echo "--------------------------------------"
 bootctl install --path /mnt/boot
-echo "default arch.conf" >> /mnt/boot/loader/loader.conf
-cat <<EOF > /mnt/boot/loader/entries/arch.conf
+echo "default arch.conf" >>/mnt/boot/loader/loader.conf
+cat <<EOF >/mnt/boot/loader/entries/arch.conf
 title Arch Linux
 linux /vmlinuz-linux
 initrd /initramfs-linux.img
 options root=${ROOT} rw
 EOF
 
-
-cat <<REALEND > /mnt/next.sh
+cat <<REALEND >/mnt/next.sh
 useradd -m $USER
-usermod -aG wheel,storage,power,audio $USER
+usermod -aG wheel $USER
 echo $USER:$PASSWORD | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "-------------------------------------------------"
-echo "Setup Language to US and set locale"
+echo "Setup Language to FR and set locale"
 echo "-------------------------------------------------"
-sed -i 's/^#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+sed -i 's/^#fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
-echo "LANG=en_US.UTF-8" >> /etc/locale.conf
+echo "LANG=fr_FR.UTF-8" >> /etc/locale.conf
 
-ln -sf /usr/share/zoneinfo/Asia/Kathmandu /etc/localtime
+ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 
-echo "arch" > /etc/hostname
-cat <<EOF > /etc/hosts
-127.0.0.1	localhost
-::1			localhost
-127.0.1.1	arch.localdomain	arch
-EOF
+echo "archlinux" > /etc/hostname
 
 echo "-------------------------------------------------"
 echo "Display and Audio Drivers"
@@ -94,21 +86,13 @@ echo "-------------------------------------------------"
 
 pacman -S xorg pulseaudio --noconfirm --needed
 
-systemctl enable NetworkManager bluetooth
+systemctl enable NetworkManager bluetooth.service
 
 #DESKTOP ENVIRONMENT
 if [[ $DESKTOP == '1' ]]
 then 
-    pacman -S gnome gdm --noconfirm --needed
-    systemctl enable gdm
-elif [[ $DESKTOP == '2' ]]
-then
     pacman -S plasma sddm kde-applications --noconfirm --needed
     systemctl enable sddm
-elif [[ $DESKTOP == '3' ]]
-then
-    pacman -S xfce4 xfce4-goodies lightdm lightdm-gtk-greeter --noconfirm --needed
-    systemctl enable lightdm
 else
     echo "You have choosen to Install Desktop Yourself"
 fi
@@ -119,6 +103,4 @@ echo "-------------------------------------------------"
 
 REALEND
 
-
 arch-chroot /mnt sh next.sh
-
