@@ -53,16 +53,10 @@ genfstab -U /mnt >>/mnt/etc/fstab
 echo "--------------------------------------"
 echo "-- Bootloader Installation  --"
 echo "--------------------------------------"
-bootctl install --path /mnt/boot
-echo "default arch.conf" >>/mnt/boot/loader/loader.conf
-cat <<EOF >/mnt/boot/loader/entries/arch.conf
-title Arch Linux
-linux /vmlinuz-linux
-initrd /initramfs-linux.img
-options root=${ROOT} rw
-EOF
+pacman -S grub efibootmgr intel-ucode --noconfirm --needed
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
 
-cat <<REALEND >/mnt/next.sh
 useradd -m $USER
 usermod -aG wheel $USER
 echo $USER:$PASSWORD | chpasswd
