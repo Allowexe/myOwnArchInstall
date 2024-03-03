@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-echo "Please enter EFI paritition: (/dev/xxx1"
+echo "EFI paritition ? (/dev/xxx1)"
 read EFI
 
-echo "Please enter SWAP paritition: (/dev/sda2)"
+echo "SWAP paritition ? (/dev/sda2)"
 read SWAP
 
-echo "Please enter Root(/) paritition: (/dev/sda3)"
+echo "Root(/) paritition ? (/dev/sda3)"
 read ROOT
 
 echo "username ?"
@@ -15,9 +15,9 @@ read USER
 echo "password ?"
 read PASSWORD
 
-echo "KDE or Nothing ?"
+echo "KDE or NOTHING ?"
 echo "1. KDE"
-echo "2. NoDesktop"
+echo "2. NOTHING"
 read DESKTOP
 
 # make filesystems
@@ -34,7 +34,7 @@ mkdir /mnt/boot
 mount -t vfat "${EFI}" /mnt/boot/
 
 echo "--------------------------------------"
-echo "-- INSTALLING Arch Linux BASE on Main Drive       --"
+echo "-- INSTALLING Arch Linux            --"
 echo "--------------------------------------"
 pacstrap /mnt base base-devel --noconfirm --needed
 
@@ -53,18 +53,22 @@ genfstab -U /mnt >>/mnt/etc/fstab
 echo "--------------------------------------"
 echo "-- Bootloader Installation  --"
 echo "--------------------------------------"
+
+# grub
 pacman -S grub efibootmgr intel-ucode --noconfirm --needed
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 
+# user
 useradd -m $USER
 usermod -aG wheel $USER
 echo $USER:$PASSWORD | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "-------------------------------------------------"
-echo "Setup Language to FR and set locale"
+echo "-- Setup Language to FR and set locale         --"
 echo "-------------------------------------------------"
+
 sed -i 's/^#fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
 echo "LANG=fr_FR.UTF-8" >> /etc/locale.conf
@@ -75,7 +79,7 @@ hwclock --systohc
 echo "archlinux" > /etc/hostname
 
 echo "-------------------------------------------------"
-echo "Display and Audio Drivers"
+echo "-- Display and Audio Drivers                   --"
 echo "-------------------------------------------------"
 
 pacman -S xorg pulseaudio --noconfirm --needed
@@ -92,9 +96,5 @@ else
 fi
 
 echo "-------------------------------------------------"
-echo "Install Complete, You can reboot now"
+echo "-- Install Complete, You can reboot now        --"
 echo "-------------------------------------------------"
-
-REALEND
-
-arch-chroot /mnt sh next.sh
