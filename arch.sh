@@ -104,6 +104,10 @@ echo "-------------------------------------------------"
 
 sed -i 's/^#Color /Color/' /etc/pacman.conf
 sed -i 's/^#ParallelDownloads = 5 /ParallelDownloads = 5/' /etc/pacman.conf
+sed -i '/^ParallelDownloads = 5/a ILoveCandy' /etc/pacman.conf
+sed -i 's/^#[extra-testing] /[extra-testing]/' /etc/pacman.conf
+sed -i '/^\s*#\s*\[multilib\]/ s/^#//' /etc/pacman.conf
+sed -i '/^\s*#Include = \/etc\/pacman\.d\/mirrorlist/ s/^#//' /etc/pacman.conf
 
 echo "-------------------------------------------------"
 echo "-- Install Complete, You can reboot now        --"
