@@ -11,3 +11,7 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 yay -S --noconfirm zsh-theme-powerlevel10k-git
 echo 'source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme' >>~/.zshrc
 ```
+Then, relaunch your shell and configure p10k like this :
+```txt
+y y n y 1 y 3 1 2 3 1 1 2 1 1 2 2 1 y 1 y
+```
