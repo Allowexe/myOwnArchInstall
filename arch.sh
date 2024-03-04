@@ -99,5 +99,12 @@ else
 fi
 
 echo "-------------------------------------------------"
+echo "-- Setting up Pacman                           --"
+echo "-------------------------------------------------"
+
+sed -i 's/^#Color /Color/' /etc/pacman.conf
+sed -i 's/^#ParallelDownloads = 5 /ParallelDownloads = 5/' /etc/pacman.conf
+
+echo "-------------------------------------------------"
 echo "-- Install Complete, You can reboot now        --"
 echo "-------------------------------------------------"
