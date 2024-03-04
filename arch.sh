@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+loadkeys fr-pc   # my keymap
+setfont ter-132b # High-DPI screens
+timedatectl
+
 echo "EFI paritition ?"
 read EFI
 
@@ -36,10 +40,10 @@ mount -t vfat "${EFI}" /mnt/boot/
 echo "--------------------------------------"
 echo "-- INSTALLING Arch Linux            --"
 echo "--------------------------------------"
-pacstrap /mnt base base-devel --noconfirm --needed
+pacstrap -K /mnt base base-devel --noconfirm --needed
 
 # kernel
-pacstrap /mnt linux linux-firmware linux-headers --noconfirm --needed
+pacstrap -K /mnt linux linux-firmware linux-headers --noconfirm --needed
 
 echo "--------------------------------------"
 echo "-- Setup Dependencies and Stuff     --"
@@ -66,17 +70,17 @@ echo $USER:$PASSWORD | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "-------------------------------------------------"
-echo "-- Setup Language to FR and set locale         --"
+echo "-- Setup Language to EN and set locale         --"
 echo "-------------------------------------------------"
 
 sed -i 's/^#fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen
 locale-gen
-echo "LANG=fr_FR.UTF-8" >> /etc/locale.conf
+echo "LANG=en_US.UTF-8" >>/etc/locale.conf
 
 ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 
-echo "archlinux" > /etc/hostname
+echo "archlinux" >/etc/hostname
 
 echo "-------------------------------------------------"
 echo "-- Display and Audio Drivers                   --"
@@ -87,12 +91,11 @@ pacman -S xorg pulseaudio --noconfirm --needed
 systemctl enable NetworkManager bluetooth.service
 
 #DESKTOP ENVIRONMENT
-if [[ $DESKTOP == '1' ]]
-then 
-    pacman -S plasma kde-applications sddm --noconfirm --needed
-    systemctl enable sddm
+if [[ $DESKTOP == '1' ]]; then
+	pacman -S plasma kde-applications sddm --noconfirm --needed
+	systemctl enable sddm
 else
-    echo "You have choosen to install desktop yourself, good luck !"
+	echo "You have choosen to install desktop yourself, good luck !"
 fi
 
 echo "-------------------------------------------------"
