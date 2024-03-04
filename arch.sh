@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-echo "EFI paritition ? (/dev/xxx1)"
+echo "EFI paritition ?"
 read EFI
 
-echo "SWAP paritition ? (/dev/sda2)"
+echo "SWAP paritition ?"
 read SWAP
 
-echo "Root(/) paritition ? (/dev/sda3)"
+echo "Root(/) paritition ?"
 read ROOT
 
 echo "username ?"
@@ -15,7 +15,7 @@ read USER
 echo "password ?"
 read PASSWORD
 
-echo "KDE or NOTHING ?"
+echo "KDE or... NOTHING ?"
 echo "1. KDE"
 echo "2. NOTHING"
 read DESKTOP
@@ -89,10 +89,10 @@ systemctl enable NetworkManager bluetooth.service
 #DESKTOP ENVIRONMENT
 if [[ $DESKTOP == '1' ]]
 then 
-    pacman -S plasma sddm kde-applications --noconfirm --needed
+    pacman -S plasma kde-applications sddm --noconfirm --needed
     systemctl enable sddm
 else
-    echo "You have choosen to Install Desktop Yourself"
+    echo "You have choosen to install desktop yourself, good luck !"
 fi
 
 echo "-------------------------------------------------"
