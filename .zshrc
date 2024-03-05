@@ -109,7 +109,7 @@ source $ZSH/oh-my-zsh.sh
 alias ls='eza --icons=auto'
 alias cd='z'
 alias zshconfig='source ~/.zshrc'
-alias sl='sl -5Ge'
+alias sl='sl -G -e -5'
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
