@@ -49,7 +49,7 @@ echo "--------------------------------------"
 echo "-- Setup Dependencies and Stuff     --"
 echo "--------------------------------------"
 
-pacstrap /mnt networkmanager wireless_tools neovim intel-ucode bluez bluez-utils blueman git firefox kitty vlc jdk-openjdk --noconfirm --needed
+pacstrap -K /mnt networkmanager wireless_tools neovim intel-ucode bluez bluez-utils sudo blueman git firefox kitty vlc jdk-openjdk --noconfirm --needed
 
 # fstab
 genfstab -U /mnt >>/mnt/etc/fstab
