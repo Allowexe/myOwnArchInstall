@@ -4,7 +4,7 @@ My own archinstall script, because I've been installing it 5 time this week and 
 ### -- WORK IN PROGRESS --
 After putting everything in place, execute this :
 ```sh
-sudo pacman -S eza zoxide $(pacman -Sgq nerd-fonts) ruby npm croc
+sudo pacman -S eza zsh zoxide $(pacman -Sgq nerd-fonts) ruby npm croc
 sudo gem install solargraph --user
 sudo npm install -g pyright
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
