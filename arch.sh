@@ -49,7 +49,7 @@ echo "--------------------------------------"
 echo "-- Setup Dependencies and Stuff     --"
 echo "--------------------------------------"
 
-pacstrap -K /mnt networkmanager wireless_tools neovim intel-ucode bluez bluez-utils sudo blueman git firefox kitty vlc jdk-openjdk --noconfirm --needed
+pacstrap -K /mnt networkmanager wireless_tools neovim intel-ucode bluez bluez-utils sudo blueman bitwarden git firefox thunderbird kitty vlc jdk-openjdk btop protonup-qt  --noconfirm --needed
 
 # fstab
 genfstab -U /mnt >>/mnt/etc/fstab
@@ -70,7 +70,7 @@ echo $USER:$PASSWORD | chpasswd
 sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
 
 echo "-------------------------------------------------"
-echo "-- Setup Language to EN and set locale         --"
+echo "-- Setup Language to EN and set locale to FR   --"
 echo "-------------------------------------------------"
 
 sed -i 's/^#fr_FR.UTF-8 UTF-8/fr_FR.UTF-8 UTF-8/' /etc/locale.gen
@@ -80,7 +80,7 @@ echo "LANG=en_US.UTF-8" >>/etc/locale.conf
 ln -sf /usr/share/zoneinfo/Europe/Paris /etc/localtime
 hwclock --systohc
 
-echo "archlinux" >/etc/hostname
+echo "arch" >/etc/hostname
 
 echo "-------------------------------------------------"
 echo "-- Display and Audio Drivers                   --"
